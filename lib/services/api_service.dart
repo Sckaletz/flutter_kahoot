@@ -8,7 +8,7 @@ class ApiService {
   static const String baseUrl = 'https://kahoot-api.mercantec.tech/api';
 
   // Henter alle tilgængelige quizzer
-  static Future<List<Quiz>> getQuizzes() async {
+  Future<List<Quiz>> getQuizzes() async {
     final response = await http.get(Uri.parse('$baseUrl/Quiz'));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -18,7 +18,7 @@ class ApiService {
   }
 
   // Henter session via PIN
-  static Future<QuizSession> getSessionByPin(String pin) async {
+  Future<QuizSession> getSessionByPin(String pin) async {
     final response = await http.get(Uri.parse('$baseUrl/QuizSession/pin/$pin'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

@@ -18,13 +18,15 @@ class QuizListPage extends StatefulWidget {
 class _QuizListPageState extends State<QuizListPage> {
   // Future der indeholder quizzerne - bruges til FutureBuilder
   late Future<List<Quiz>> _futureQuizzes;
+  // ApiService instans
+  final ApiService _apiService = ApiService();
 
   @override
   // initState kaldes når widget'en først oprettes
   void initState() {
     super.initState();
     // Initialiserer Future med quizzer fra API'et
-    _futureQuizzes = ApiService.getQuizzes();
+    _futureQuizzes = _apiService.getQuizzes();
   }
 
   @override

@@ -21,6 +21,8 @@ class _LandingPageState extends State<LandingPage> {
   bool _isLoading = false;
   // Besked der vises hvis der opstår en fejl
   String? _errorMessage;
+  // ApiService instans
+  final ApiService _apiService = ApiService();
 
   @override
   // Rydder op når widget'en bliver destrueret
@@ -49,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
 
     try {
       // Henter session fra API'et via ApiService
-      final session = await ApiService.getSessionByPin(pin);
+      final session = await _apiService.getSessionByPin(pin);
       // TODO: Naviger til quiz session skærm når den er oprettet
       // For nu viser vi bare en success besked
       if (mounted) {
