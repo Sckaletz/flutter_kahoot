@@ -27,14 +27,6 @@ class _QuizListPageState extends State<QuizListPage> {
     _futureQuizzes = ApiService.getQuizzes();
   }
 
-  // Metode der genindlæser quizzerne
-  void _refreshQuizzes() {
-    setState(() {
-      // Opretter en ny Future, hvilket trigger FutureBuilder til at genindlæse
-      _futureQuizzes = ApiService.getQuizzes();
-    });
-  }
-
   @override
   // build metode der bygger UI'et
   Widget build(BuildContext context) {
