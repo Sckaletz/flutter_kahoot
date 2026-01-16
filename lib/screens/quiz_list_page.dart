@@ -134,12 +134,6 @@ class _QuizListPageState extends State<QuizListPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Knap til at prøve igen
-                  ElevatedButton.icon(
-                    onPressed: _refreshQuizzes, // Prøver at hente quizzer igen
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Prøv igen'),
-                  ),
                 ],
               ),
             );
