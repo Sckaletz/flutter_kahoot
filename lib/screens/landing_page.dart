@@ -99,7 +99,15 @@ class _LandingPageState extends State<LandingPage> {
                   color: Color.fromARGB(255, 155, 120, 14), // Guld farve
                 ),
               ),
-              // Tomt rum på 48 pixels mellem titel og input felt
+              // Tomt rum på 16 pixels mellem titel og ikon
+              const SizedBox(height: 16),
+              // Trofæ ikon
+              const Icon(
+                Icons.emoji_events,
+                size: 48,
+                color: Color.fromARGB(255, 155, 120, 14), // Guld farve
+              ),
+              // Tomt rum på 48 pixels mellem ikon og input felt
               const SizedBox(height: 48),
               // PIN input felt
               TextField(
