@@ -66,15 +66,6 @@ class _QuizListPageState extends State<QuizListPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Titel i AppBar
         title: const Text('Kahoot Quizzes'),
-        // Knapper i højre side af AppBar
-        actions: [
-          // Refresh knap til at genindlæse quizzer
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _fetchQuizzes, // Kalder _fetchQuizzes når der trykkes
-            tooltip: 'Opdater', // Tooltip tekst
-          ),
-        ],
       ),
       // Body indeholder hovedindholdet
       body: _buildBody(),
@@ -155,13 +146,23 @@ class _QuizListPageState extends State<QuizListPage> {
                   fontSize: 18,
                 ),
               ),
-              // Quiz beskrivelse (kun hvis den ikke er tom)
-              subtitle: quiz.description.isNotEmpty
-                  ? Padding(
+              // Quiz beskrivelse og spørgsmål antal
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Quiz beskrivelse (kun hvis den ikke er tom)
+                  if (quiz.description.isNotEmpty)
+                    Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(quiz.description),
-                    )
-                  : null, // Viser ikke noget hvis beskrivelsen er tom
+                    ),
+                  // Antal spørgsmål
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4), //
+                    child: Text('${quiz.questionCount} spørgsmål'),
+                  ),
+                ],
+              ),
             ),
           );
         },
