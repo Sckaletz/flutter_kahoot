@@ -122,51 +122,47 @@ class _QuizListPageState extends State<QuizListPage> {
     }
 
     // Hvis alt er okay, vis listen af quizzer
-    return RefreshIndicator(
-      // Tillader brugeren at trække ned for at opdatere listen
-      onRefresh: _fetchQuizzes,
-      child: ListView.builder(
-        // Antal items i listen
-        itemCount: _quizzes.length,
-        // Builder funktion der opretter hvert item i listen
-        itemBuilder: (context, index) {
-          // Henter den aktuelle quiz
-          final quiz = _quizzes[index];
-          return Card(
-            // Margin omkring kortet
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-              // Padding inde i ListTile
-              contentPadding: const EdgeInsets.all(16),
-              // Quiz titel
-              title: Text(
-                quiz.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold, // Fed tekst
-                  fontSize: 18,
-                ),
-              ),
-              // Quiz beskrivelse og spørgsmål antal
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Quiz beskrivelse (kun hvis den ikke er tom)
-                  if (quiz.description.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(quiz.description),
-                    ),
-                  // Antal spørgsmål
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4), //
-                    child: Text('${quiz.questionCount} spørgsmål'),
-                  ),
-                ],
+    return ListView.builder(
+      // Antal items i listen
+      itemCount: _quizzes.length,
+      // Builder funktion der opretter hvert item i listen
+      itemBuilder: (context, index) {
+        // Henter den aktuelle quiz
+        final quiz = _quizzes[index];
+        return Card(
+          // Margin omkring kortet
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ListTile(
+            // Padding inde i ListTile
+            contentPadding: const EdgeInsets.all(16),
+            // Quiz titel
+            title: Text(
+              quiz.title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold, // Fed tekst
+                fontSize: 18,
               ),
             ),
-          );
-        },
-      ),
+            // Quiz beskrivelse og spørgsmål antal
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Quiz beskrivelse (kun hvis den ikke er tom)
+                if (quiz.description.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(quiz.description),
+                  ),
+                // Antal spørgsmål
+                Padding(
+                  padding: const EdgeInsets.only(top: 4), //
+                  child: Text('${quiz.questionCount} spørgsmål'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
