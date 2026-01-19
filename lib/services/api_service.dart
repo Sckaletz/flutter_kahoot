@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/quiz.dart';
 import '../models/quiz_session.dart';
 import '../models/participant.dart';
+import '../models/leaderboard.dart';
 
 // API Basis URL
 const String baseUrl = 'https://kahoot-api.mercantec.tech/api';
@@ -177,6 +178,31 @@ Future<void> startQuizSession(int sessionId) async {
       // så kast en exception.
       throw Exception(
         'Kunne ikke starte session med ID $sessionId: ${response.statusCode}',
+      );
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
+
+// HENTER LEADERBOARD
+Future<List<Leaderboard>> fetchLeaderboard(int sessionId) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$baseUrl/Participant/leaderboard/$sessionId'),
+    );
+
+    if (response.statusCode == 200) {
+      // Hvis serveren returnerede en 200 OK response,
+      // så parse JSON'en.
+      return (jsonDecode(response.body) as List<dynamic>)
+          .map((l) => Leaderboard.fromJson(l as Map<String, dynamic>))
+          .toList();
+    } else {
+      // Hvis serveren ikke returnerede en 200 OK response,
+      // så kast en exception.
+      throw Exception(
+        'Kunne ikke hente leaderboard med ID $sessionId: ${response.statusCode}',
       );
     }
   } catch (e) {
