@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/quiz.dart';
 import '../models/quiz_session.dart';
+import '../models/join_session.dart';
 
 // API Basis URL
 const String baseUrl = 'https://kahoot-api.mercantec.tech/api';
@@ -94,6 +95,38 @@ Future<QuizSession> startSession(int quizId) async {
       // så kast en exception.
       throw Exception(
         'Kunne ikke starte session med quiz ID $quizId: ${response.statusCode}',
+      );
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
+
+// JOIN SESSION
+Future<JoinSession> joinSession(String sessionPin, String nickname) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl/QuizSession/join'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'sessionPin': sessionPin,
+        'nickname': nickname,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Hvis serveren returnerede en 200 OK eller 201 CREATED response,
+      // så parse JSON'en.
+      return JoinSession.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+    } else {
+      // Hvis serveren ikke returnerede en 200/201 response,
+      // så kast en exception.
+      throw Exception(
+        'Kunne ikke joine session med PIN $sessionPin: ${response.statusCode}',
       );
     }
   } catch (e) {
