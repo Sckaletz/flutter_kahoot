@@ -1,8 +1,5 @@
-// Importerer Flutter Material Design komponenter
 import 'package:flutter/material.dart';
-// Importerer QuizListPage skærmen, så vi kan navigere til den
 import 'quiz_list_page.dart';
-// Importerer fetchSessionByPin funktionen, så vi kan hente session via PIN
 import '../services/api_service.dart';
 
 // LandingPage er den første skærm, brugeren ser når appen starter
