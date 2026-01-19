@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_list_page.dart';
+import 'nickname_page.dart';
 import '../services/api_service.dart';
 
 // LandingPage er den første skærm, brugeren ser når appen starter
@@ -48,15 +49,18 @@ class _LandingPageState extends State<LandingPage> {
       // Henter session fra API'et via fetchSessionByPin funktionen
       final session = await fetchSessionByPin(pin);
 
-      // For nu viser vi bare en success besked
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Tilsluttet quiz: ${session.quizTitle}'),
-            backgroundColor: Colors.green,
+      if (!mounted) return;
+
+      // Naviger til nickname siden, hvor brugeren kan indtaste nickname og joine
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NicknamePage(
+            sessionPin: session.sessionPin,
+            quizTitle: session.quizTitle,
           ),
-        );
-      }
+        ),
+      );
     } catch (e) {
       // Håndterer fejl hvis API kaldet fejler
       setState(() {
