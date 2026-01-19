@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/enter_pin_screen.dart';
+import 'screens/welcome_screen.dart';
 import 'screens/join_session_screen.dart';
 import 'screens/waiting_room_screen.dart';
 import 'screens/question_screen.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const EnterPinScreen(),
+        '/': (context) => const WelcomeScreen(),
         '/join': (context) => const JoinSessionScreen(),
         '/waiting': (context) => const WaitingRoomScreen(),
         '/question': (context) => const QuestionScreen(),
