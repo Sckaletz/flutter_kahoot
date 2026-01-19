@@ -82,14 +82,15 @@ Future<QuizSession> startSession(int quizId) async {
       body: jsonEncode(<String, int>{'quizId': quizId}),
     );
 
-    if (response.statusCode == 200) {
-      // Hvis serveren returnerede en 200 OK response,
+    // API'et returnerer 201 Created ved succes
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Hvis serveren returnerede en 200 OK eller 201 CREATED response,
       // så parse JSON'en.
       return QuizSession.fromJson(
         jsonDecode(response.body) as Map<String, dynamic>,
       );
     } else {
-      // Hvis serveren ikke returnerede en 200 OK response,
+      // Hvis serveren ikke returnerede en 200/201 response,
       // så kast en exception.
       throw Exception(
         'Kunne ikke starte session med quiz ID $quizId: ${response.statusCode}',

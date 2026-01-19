@@ -1,8 +1,7 @@
-// Importerer Flutter Material Design komponenter
 import 'package:flutter/material.dart';
-// Importerer Quiz modellen, så vi kan bruge Quiz objekter
 import '../models/quiz.dart';
 import '../services/api_service.dart';
+import 'host_page.dart';
 
 // QuizListPage er en StatefulWidget, fordi den skal kunne opdatere sin tilstand
 class QuizListPage extends StatefulWidget {
@@ -94,6 +93,15 @@ class _QuizListPageState extends State<QuizListPage> {
                         ),
                       ],
                     ),
+                    // Når man trykker på en quiz, går man til HostPage for den quiz
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HostPage(quiz: quiz),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
