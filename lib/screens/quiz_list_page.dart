@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 // Importerer Quiz modellen, så vi kan bruge Quiz objekter
 import '../models/quiz.dart';
-// Importerer ApiService, så vi kan hente quizzer fra API'et
+// Importerer fetchQuizzes funktionen, så vi kan hente quizzer fra API'et
 import '../services/api_service.dart';
 
 // QuizListPage er en StatefulWidget, fordi den skal kunne opdatere sin tilstand
@@ -17,16 +17,14 @@ class QuizListPage extends StatefulWidget {
 // Privat state klasse, der håndterer logikken og tilstanden for QuizListPage
 class _QuizListPageState extends State<QuizListPage> {
   // Future der indeholder quizzerne - bruges til FutureBuilder
-  late Future<List<Quiz>> _futureQuizzes;
-  // ApiService instans
-  final ApiService _apiService = ApiService();
+  late Future<List<Quiz>> futureQuizzes;
 
   @override
   // initState kaldes når widget'en først oprettes
   void initState() {
     super.initState();
     // Initialiserer Future med quizzer fra API'et
-    _futureQuizzes = _apiService.getQuizzes();
+    futureQuizzes = fetchQuizzes();
   }
 
   @override
@@ -43,7 +41,7 @@ class _QuizListPageState extends State<QuizListPage> {
       // Body indeholder hovedindholdet - bruger FutureBuilder til at håndtere async data
       body: FutureBuilder<List<Quiz>>(
         // Future der skal håndteres
-        future: _futureQuizzes,
+        future: futureQuizzes,
         // Builder funktion der bygger UI baseret på Future's tilstand
         builder: (context, snapshot) {
           // Hvis data er blevet hentet succesfuldt
