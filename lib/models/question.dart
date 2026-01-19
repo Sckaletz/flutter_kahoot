@@ -13,21 +13,12 @@ class Answer {
 
   // Opretter en Answer instans fra JSON data
   factory Answer.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'id': int id,
-        'text': String text,
-        'isCorrect': bool isCorrect,
-        'orderIndex': int orderIndex,
-      } =>
-        Answer(
-          id: id,
-          text: text,
-          isCorrect: isCorrect,
-          orderIndex: orderIndex,
-        ),
-      _ => throw const FormatException('Failed to load answer.'),
-    };
+    return Answer(
+      id: json['id'] as int? ?? 0,
+      text: json['text'] as String? ?? '',
+      isCorrect: json['isCorrect'] as bool? ?? false,
+      orderIndex: json['orderIndex'] as int? ?? 0,
+    );
   }
 }
 
@@ -50,27 +41,17 @@ class Question {
 
   // Opretter en Question instans fra JSON data
   factory Question.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'id': int id,
-        'text': String text,
-        'timeLimitSeconds': int timeLimitSeconds,
-        'points': int points,
-        'orderIndex': int orderIndex,
-      } =>
-        Question(
-          id: id,
-          text: text,
-          timeLimitSeconds: timeLimitSeconds,
-          points: points,
-          orderIndex: orderIndex,
-          answers:
-              (json['answers'] as List<dynamic>?)
-                  ?.map((a) => Answer.fromJson(a as Map<String, dynamic>))
-                  .toList() ??
-              [],
-        ),
-      _ => throw const FormatException('Failed to load question.'),
-    };
+    return Question(
+      id: json['id'] as int? ?? 0,
+      text: json['text'] as String? ?? '',
+      timeLimitSeconds: json['timeLimitSeconds'] as int? ?? 0,
+      points: json['points'] as int? ?? 0,
+      orderIndex: json['orderIndex'] as int? ?? 0,
+      answers:
+          (json['answers'] as List<dynamic>?)
+              ?.map((a) => Answer.fromJson(a as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
   }
 }

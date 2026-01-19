@@ -50,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
     try {
       // Henter session fra API'et via fetchSessionByPin funktionen
       final session = await fetchSessionByPin(pin);
-      // TODO: Naviger til quiz session skærm når den er oprettet
+
       // For nu viser vi bare en success besked
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

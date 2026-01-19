@@ -22,29 +22,18 @@ class Quiz {
 
   // Opretter en Quiz instans fra JSON data modtaget fra API'et
   factory Quiz.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'id': int id,
-        'title': String title,
-        'description': String description,
-        'pin': String pin,
-        'status': String status,
-        'questionCount': int questionCount,
-      } =>
-        Quiz(
-          id: id,
-          title: title,
-          description: description,
-          pin: pin,
-          status: status,
-          questionCount: questionCount,
-          questions:
-              (json['questions'] as List<dynamic>?)
-                  ?.map((q) => Question.fromJson(q as Map<String, dynamic>))
-                  .toList() ??
-              [],
-        ),
-      _ => throw const FormatException('Failed to load quiz.'),
-    };
+    return Quiz(
+      id: json['id'] as int? ?? 0,
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      pin: json['pin'] as String? ?? '',
+      status: json['status'] as String? ?? '',
+      questionCount: json['questionCount'] as int? ?? 0,
+      questions:
+          (json['questions'] as List<dynamic>?)
+              ?.map((q) => Question.fromJson(q as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
   }
 }

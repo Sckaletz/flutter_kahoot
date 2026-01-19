@@ -13,12 +13,19 @@ Future<List<Quiz>> fetchQuizzes() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
-    return data.map((q) => Quiz.fromJson(q as Map<String, dynamic>)).toList();
+    try {
+      final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
+      return data.map((q) => Quiz.fromJson(q as Map<String, dynamic>)).toList();
+    } catch (e) {
+      // If parsing fails, throw an exception with more details
+      throw Exception('Kunne ikke parse quizzer: $e');
+    }
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Kunne ikke indlæse quizzer');
+    throw Exception(
+      'Kunne ikke indlæse quizzer (Status: ${response.statusCode})',
+    );
   }
 }
 
