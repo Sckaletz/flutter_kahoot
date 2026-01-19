@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 // Importerer Quiz modellen, så vi kan bruge Quiz objekter
 import '../models/quiz.dart';
-// Importerer fetchQuizzes funktionen, så vi kan hente quizzer fra API'et
 import '../services/api_service.dart';
 
 // QuizListPage er en StatefulWidget, fordi den skal kunne opdatere sin tilstand

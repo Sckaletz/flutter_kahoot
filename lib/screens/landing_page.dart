@@ -155,7 +155,6 @@ class _LandingPageState extends State<LandingPage> {
               const SizedBox(height: 24),
               // Knap der navigerer til quiz listen
               ElevatedButton(
-                // Hvad der sker når knappen trykkes
                 onPressed: () {
                   // Navigator.push navigerer til en ny skærm
                   Navigator.push(
