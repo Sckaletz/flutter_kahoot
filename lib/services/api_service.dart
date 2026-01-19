@@ -6,7 +6,7 @@ import '../models/quiz_session.dart';
 // API Basis URL
 const String baseUrl = 'https://kahoot-api.mercantec.tech/api';
 
-// Henter alle tilgængelige quizzer
+// HENTER ALL QUIZZES
 Future<List<Quiz>> fetchQuizzes() async {
   try {
     final response = await http.get(Uri.parse('$baseUrl/Quiz'));
@@ -27,7 +27,7 @@ Future<List<Quiz>> fetchQuizzes() async {
   }
 }
 
-// Henter en specifik quiz med alle spørgsmål og svar via ID
+// HENTER QUIZ VIA ID
 Future<Quiz> fetchQuizById(int id) async {
   try {
     final response = await http.get(Uri.parse('$baseUrl/Quiz/$id'));
@@ -48,7 +48,7 @@ Future<Quiz> fetchQuizById(int id) async {
   }
 }
 
-// Henter session via PIN
+// HENTER QUIZ SESSION VIA PIN
 Future<QuizSession> fetchSessionByPin(String pin) async {
   try {
     final response = await http.get(Uri.parse('$baseUrl/QuizSession/pin/$pin'));
@@ -64,6 +64,35 @@ Future<QuizSession> fetchSessionByPin(String pin) async {
       // så kast en exception.
       throw Exception(
         'Kunne ikke finde session med PIN: $pin: ${response.statusCode}',
+      );
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
+
+// STARTER EN NY QUIZ SESSION - OPRETTER PIN OG STARTER SESSION
+Future<QuizSession> startSession(int quizId) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl/QuizSession'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, int>{'quizId': quizId}),
+    );
+
+    if (response.statusCode == 200) {
+      // Hvis serveren returnerede en 200 OK response,
+      // så parse JSON'en.
+      return QuizSession.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+    } else {
+      // Hvis serveren ikke returnerede en 200 OK response,
+      // så kast en exception.
+      throw Exception(
+        'Kunne ikke starte session med quiz ID $quizId: ${response.statusCode}',
       );
     }
   } catch (e) {
