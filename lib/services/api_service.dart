@@ -16,11 +16,8 @@ Future<List<Quiz>> fetchQuizzes() async {
     return (jsonDecode(response.body) as List<dynamic>)
         .map((q) => Quiz.fromJson(q as Map<String, dynamic>))
         .toList();
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Kunne ikke indlæse quizzer');
   }
+  throw Exception('Kunne ikke indlæse quizzer');
 }
 
 // Henter session via PIN
