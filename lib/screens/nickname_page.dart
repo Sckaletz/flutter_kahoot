@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../models/participant.dart';
 import '../services/api_service.dart';
 

@@ -71,6 +71,7 @@ class _HostPageState extends State<HostPage> {
     if (_session == null) return;
 
     try {
+      // Henter den opdaterede session via PIN
       final updatedSession = await fetchSessionByPin(_session!.sessionPin);
       if (mounted) {
         setState(() {
@@ -171,21 +172,12 @@ class _HostPageState extends State<HostPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _session!.participantCount == 1
-                        ? 'deltager'
-                        : 'deltagere',
+                    _session!.participantCount == 1 ? 'deltager' : 'deltagere',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Opdaterer automatisk hver 2. sekund',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey,
-                ),
           ),
         ],
       ),
