@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/join_session.dart';
+import '../models/participant.dart';
 import '../services/api_service.dart';
 
 // Side hvor deltager kan indtaste et nickname og joine en session via PIN
@@ -22,7 +22,7 @@ class _NicknamePageState extends State<NicknamePage> {
   final TextEditingController _nicknameController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
-  JoinSession? _joinSession;
+  Participant? _joinSession;
 
   @override
   void dispose() {
@@ -72,7 +72,10 @@ class _NicknamePageState extends State<NicknamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Join: ${widget.quizTitle}')),
+      appBar: AppBar(
+        title: Text('Join: ${widget.quizTitle}'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),

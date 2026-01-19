@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/quiz.dart';
 import '../models/quiz_session.dart';
@@ -17,12 +18,19 @@ class _HostPageState extends State<HostPage> {
   QuizSession? _session;
   bool _isLoading = true;
   String? _errorMessage;
+  Timer? _pollingTimer;
 
   @override
   void initState() {
     super.initState();
     // Opretter automatisk en session (og PIN) når man går ind på siden
     _startSession();
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
 
   // Starter en ny session for den valgte quiz og henter PIN
@@ -38,11 +46,40 @@ class _HostPageState extends State<HostPage> {
         _session = session;
         _isLoading = false;
       });
+      // Starter polling når session er oprettet
+      _startPolling();
     } catch (e) {
       setState(() {
         _errorMessage = e.toString().replaceAll('Exception: ', '');
         _isLoading = false;
       });
+    }
+  }
+
+  // Starter automatisk polling for at opdatere session info (inkl. deltagerantal)
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_session != null) {
+        _updateSession();
+      }
+    });
+  }
+
+  // Opdaterer session info ved at hente den opdaterede session via PIN
+  Future<void> _updateSession() async {
+    if (_session == null) return;
+
+    try {
+      final updatedSession = await fetchSessionByPin(_session!.sessionPin);
+      if (mounted) {
+        setState(() {
+          _session = updatedSession;
+        });
+      }
+    } catch (e) {
+      // Ignorer fejl ved polling - vi vil ikke forstyrre UI'et
+      // Session kan stadig være gyldig selvom polling fejler
     }
   }
 
@@ -91,34 +128,67 @@ class _HostPageState extends State<HostPage> {
       return const Text('Ingen session data tilgængelig');
     }
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          'Session PIN',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          _session!.sessionPin,
-          style: const TextStyle(
-            fontSize: 48,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 4,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            'Session PIN',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-        ),
-        const SizedBox(height: 24),
-        Text(
-          'Status: ${_session!.status}',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Deltagere: ${_session!.participantCount}',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ],
+          const SizedBox(height: 16),
+          Text(
+            _session!.sessionPin,
+            style: const TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 4,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Status: ${_session!.status}',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 16),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Deltagere',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${_session!.participantCount}',
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _session!.participantCount == 1
+                        ? 'deltager'
+                        : 'deltagere',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Opdaterer automatisk hver 2. sekund',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.grey,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }
