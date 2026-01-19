@@ -17,6 +17,7 @@ class HostPage extends StatefulWidget {
 class _HostPageState extends State<HostPage> {
   QuizSession? _session;
   bool _isLoading = true;
+  bool _isStarting = false;
   String? _errorMessage;
   Timer? _pollingTimer;
 
@@ -81,6 +82,34 @@ class _HostPageState extends State<HostPage> {
     } catch (e) {
       // Ignorer fejl ved polling - vi vil ikke forstyrre UI'et
       // Session kan stadig være gyldig selvom polling fejler
+    }
+  }
+
+  // Starter quiz session
+  Future<void> _startQuiz() async {
+    if (_session == null || _session!.participantCount < 1) return;
+
+    setState(() {
+      _isStarting = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await startQuizSession(_session!.id);
+      // Opdaterer session efter start for at få den nye status
+      await _updateSession();
+      if (mounted) {
+        setState(() {
+          _isStarting = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isStarting = false;
+          _errorMessage = e.toString().replaceAll('Exception: ', '');
+        });
+      }
     }
   }
 
@@ -179,6 +208,33 @@ class _HostPageState extends State<HostPage> {
               ),
             ),
           ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: (_session!.participantCount >= 1 && !_isStarting)
+                ? _startQuiz
+                : null,
+            icon: _isStarting
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.play_arrow),
+            label: Text(_isStarting ? 'Starter...' : 'Start Quiz'),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: const TextStyle(fontSize: 18),
+            ),
+          ),
+          if (_session!.participantCount < 1) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Vent på mindst én deltager',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+            ),
+          ],
         ],
       ),
     );

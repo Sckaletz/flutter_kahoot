@@ -158,3 +158,28 @@ Future<Participant> fetchParticipant(int participantId) async {
     throw Exception('Fejl ved API kald: $e');
   }
 }
+
+// STARTER EN QUIZ SESSION - Starter quiz session (skal have mindst én deltager)
+Future<void> startQuizSession(int sessionId) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl/QuizSession/$sessionId/start'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Session er startet succesfuldt
+      return;
+    } else {
+      // Hvis serveren ikke returnerede en 200 OK response,
+      // så kast en exception.
+      throw Exception(
+        'Kunne ikke starte session med ID $sessionId: ${response.statusCode}',
+      );
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
