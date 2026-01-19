@@ -49,7 +49,11 @@ class _HostPageState extends State<HostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Host: ${widget.quiz.title}')),
+      appBar: AppBar(
+        title: Text(widget.quiz.title),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+
       body: Center(
         child: Padding(padding: const EdgeInsets.all(24), child: _buildBody()),
       ),
