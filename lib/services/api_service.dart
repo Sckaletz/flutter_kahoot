@@ -160,7 +160,7 @@ Future<Participant> fetchParticipant(int participantId) async {
   }
 }
 
-// STARTER EN QUIZ SESSION - Starter quiz session (skal have mindst én deltager)
+// STARTER EN QUIZ SESSION
 Future<void> startQuizSession(int sessionId) async {
   try {
     final response = await http.post(

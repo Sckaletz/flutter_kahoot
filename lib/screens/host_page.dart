@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/quiz.dart';
 import '../models/quiz_session.dart';
+import '../models/leaderboard.dart';
 import '../services/api_service.dart';
 
 // HostPage viser en PIN til den valgte quiz og starter en ny session
@@ -20,6 +21,8 @@ class _HostPageState extends State<HostPage> {
   bool _isStarting = false;
   String? _errorMessage;
   Timer? _pollingTimer;
+  List<Leaderboard>? _leaderboard;
+  bool _isLoadingLeaderboard = false;
 
   @override
   void initState() {
@@ -61,8 +64,11 @@ class _HostPageState extends State<HostPage> {
   void _startPolling() {
     _pollingTimer?.cancel();
     _pollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (_session != null) {
+      if (_session != null && !_isQuizStarted(_session!.status)) {
         _updateSession();
+      } else {
+        // Stop polling hvis quiz'en er startet
+        timer.cancel();
       }
     });
   }
@@ -75,13 +81,55 @@ class _HostPageState extends State<HostPage> {
       // Henter den opdaterede session via PIN
       final updatedSession = await fetchSessionByPin(_session!.sessionPin);
       if (mounted) {
+        final wasStarted = _isQuizStarted(_session!.status);
+        final isNowStarted = _isQuizStarted(updatedSession.status);
+
         setState(() {
           _session = updatedSession;
         });
+
+        // Hvis quiz'en lige er startet, stop session polling og hent leaderboard
+        if (!wasStarted && isNowStarted) {
+          _pollingTimer?.cancel();
+          _fetchLeaderboard();
+        }
       }
     } catch (e) {
       // Ignorer fejl ved polling - vi vil ikke forstyrre UI'et
       // Session kan stadig være gyldig selvom polling fejler
+    }
+  }
+
+  // Tjekker om quiz'en er startet baseret på status
+  bool _isQuizStarted(String status) {
+    return status.toLowerCase() == 'started' ||
+        status.toLowerCase() == 'inprogress' ||
+        status.toLowerCase() == 'in_progress';
+  }
+
+  // Henter leaderboard for sessionen
+  Future<void> _fetchLeaderboard() async {
+    if (_session == null || _isLoadingLeaderboard) return;
+
+    setState(() {
+      _isLoadingLeaderboard = true;
+    });
+
+    try {
+      final leaderboard = await fetchLeaderboard(_session!.id);
+      if (mounted) {
+        setState(() {
+          _leaderboard = leaderboard;
+          _isLoadingLeaderboard = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingLeaderboard = false;
+        });
+      }
+      // Ignorer fejl ved hentning af leaderboard
     }
   }
 
@@ -96,8 +144,14 @@ class _HostPageState extends State<HostPage> {
 
     try {
       await startQuizSession(_session!.id);
+      // Stop session polling når quiz'en starter
+      _pollingTimer?.cancel();
       // Opdaterer session efter start for at få den nye status
       await _updateSession();
+      // Henter leaderboard når quiz'en er startet
+      if (_session != null && _isQuizStarted(_session!.status)) {
+        await _fetchLeaderboard();
+      }
       if (mounted) {
         setState(() {
           _isStarting = false;
@@ -181,6 +235,7 @@ class _HostPageState extends State<HostPage> {
             'Status: ${_session!.status}',
             style: Theme.of(context).textTheme.titleMedium,
           ),
+
           const SizedBox(height: 16),
           Card(
             child: Padding(
@@ -208,34 +263,102 @@ class _HostPageState extends State<HostPage> {
               ),
             ),
           ),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: (_session!.participantCount >= 1 && !_isStarting)
-                ? _startQuiz
-                : null,
-            icon: _isStarting
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.play_arrow),
-            label: Text(_isStarting ? 'Starter...' : 'Start Quiz'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              textStyle: const TextStyle(fontSize: 18),
+          // Vis kun "Start Quiz" knappen hvis quiz'en ikke er startet
+          if (!_isQuizStarted(_session!.status)) ...[
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: (_session!.participantCount >= 1 && !_isStarting)
+                  ? _startQuiz
+                  : null,
+              icon: _isStarting
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.play_arrow),
+              label: Text(_isStarting ? 'Starter...' : 'Start Quiz'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
             ),
-          ),
-          if (_session!.participantCount < 1) ...[
-            const SizedBox(height: 8),
-            Text(
-              'Vent på mindst én deltager',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+            if (_session!.participantCount < 1) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Vent på mindst én deltager',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+              ),
+            ],
+          ],
+          // Vis leaderboard hvis quiz'en er startet
+          if (_isQuizStarted(_session!.status)) ...[
+            const SizedBox(height: 24),
+            const Text(
+              'Leaderboard',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 16),
+            _buildLeaderboard(),
           ],
         ],
+      ),
+    );
+  }
+
+  // Bygger leaderboard widget
+  Widget _buildLeaderboard() {
+    if (_isLoadingLeaderboard) {
+      return const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_leaderboard == null || _leaderboard!.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: Text('Ingen deltagere endnu'),
+      );
+    }
+
+    return Card(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: _leaderboard!.length,
+        itemBuilder: (context, index) {
+          final entry = _leaderboard![index];
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Text(
+                '${entry.rank}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            title: Text(
+              entry.nickname,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            trailing: Text(
+              '${entry.totalPoints} point',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
