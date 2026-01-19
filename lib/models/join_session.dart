@@ -13,16 +13,16 @@ class JoinSession {
     required this.quizSessionId,
   });
 
-  // Opretter en JoinSession instans fra JSON data modtaget fra API'et
+  // Opretter en JoinSession instans fra JSON data
   factory JoinSession.fromJson(Map<String, dynamic> json) {
     return JoinSession(
-      id: json['id'] as int? ?? 0,
-      nickname: json['nickname'] as String? ?? '',
-      totalPoints: json['totalPoints'] as int? ?? 0,
+      id: json['id'] ?? 0,
+      nickname: json['nickname'] ?? '',
+      totalPoints: json['totalPoints'] ?? 0,
       joinedAt: json['joinedAt'] != null
-          ? DateTime.parse(json['joinedAt'] as String)
+          ? DateTime.parse(json['joinedAt'])
           : DateTime.now(),
-      quizSessionId: json['quizSessionId'] as int? ?? 0,
+      quizSessionId: json['quizSessionId'] ?? 0,
     );
   }
 }

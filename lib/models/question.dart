@@ -14,10 +14,10 @@ class Answer {
   // Opretter en Answer instans fra JSON data
   factory Answer.fromJson(Map<String, dynamic> json) {
     return Answer(
-      id: json['id'] as int? ?? 0,
-      text: json['text'] as String? ?? '',
-      isCorrect: json['isCorrect'] as bool? ?? false,
-      orderIndex: json['orderIndex'] as int? ?? 0,
+      id: json['id'] ?? 0,
+      text: json['text'] ?? '',
+      isCorrect: json['isCorrect'] ?? false,
+      orderIndex: json['orderIndex'] ?? 0,
     );
   }
 }
@@ -42,11 +42,11 @@ class Question {
   // Opretter en Question instans fra JSON data
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
-      id: json['id'] as int? ?? 0,
-      text: json['text'] as String? ?? '',
-      timeLimitSeconds: json['timeLimitSeconds'] as int? ?? 0,
-      points: json['points'] as int? ?? 0,
-      orderIndex: json['orderIndex'] as int? ?? 0,
+      id: json['id'] ?? 0,
+      text: json['text'] ?? '',
+      timeLimitSeconds: json['timeLimitSeconds'] ?? 0,
+      points: json['points'] ?? 0,
+      orderIndex: json['orderIndex'] ?? 0,
       answers:
           (json['answers'] as List<dynamic>?)
               ?.map((a) => Answer.fromJson(a as Map<String, dynamic>))

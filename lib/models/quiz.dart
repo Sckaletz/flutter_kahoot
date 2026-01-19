@@ -23,12 +23,12 @@ class Quiz {
   // Opretter en Quiz instans fra JSON data modtaget fra API'et
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
-      id: json['id'] as int? ?? 0,
-      title: json['title'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      pin: json['pin'] as String? ?? '',
-      status: json['status'] as String? ?? '',
-      questionCount: json['questionCount'] as int? ?? 0,
+      id: json['id'] ?? 0,
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      pin: json['pin'] ?? '',
+      status: json['status'] ?? '',
+      questionCount: json['questionCount'] ?? 0,
       questions:
           (json['questions'] as List<dynamic>?)
               ?.map((q) => Question.fromJson(q as Map<String, dynamic>))
