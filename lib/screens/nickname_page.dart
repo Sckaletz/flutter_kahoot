@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/participant.dart';
 import '../services/api_service.dart';
+import 'game_screen_page.dart';
 
 // Side hvor deltager kan indtaste et nickname og joine en session via PIN
 class NicknamePage extends StatefulWidget {
@@ -53,12 +54,18 @@ class _NicknamePageState extends State<NicknamePage> {
         _isLoading = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Du er nu joined som ${joined.nickname}'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      // Naviger til game screen
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GameScreenPage(
+              participant: joined,
+              sessionPin: widget.sessionPin,
+            ),
+          ),
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {

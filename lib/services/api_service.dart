@@ -4,6 +4,7 @@ import '../models/quiz.dart';
 import '../models/quiz_session.dart';
 import '../models/participant.dart';
 import '../models/leaderboard.dart';
+import '../models/question.dart';
 
 // API Basis URL
 const String baseUrl = 'https://kahoot-api.mercantec.tech/api';
@@ -73,8 +74,8 @@ Future<QuizSession> fetchSessionByPin(String pin) async {
   }
 }
 
-// STARTER EN NY QUIZ SESSION - OPRETTER PIN OG STARTER SESSION
-Future<QuizSession> startSession(int quizId) async {
+// OPRETTER EN NY QUIZ SESSION OG GENERERER EN PIN
+Future<QuizSession> createPin(int quizId) async {
   try {
     final response = await http.post(
       Uri.parse('$baseUrl/QuizSession'),
@@ -95,7 +96,7 @@ Future<QuizSession> startSession(int quizId) async {
       // Hvis serveren ikke returnerede en 200/201 response,
       // så kast en exception.
       throw Exception(
-        'Kunne ikke starte session med quiz ID $quizId: ${response.statusCode}',
+        'Kunne ikke oprette PIN for quiz ID $quizId: ${response.statusCode}',
       );
     }
   } catch (e) {
@@ -203,6 +204,90 @@ Future<List<Leaderboard>> fetchLeaderboard(int sessionId) async {
       // så kast en exception.
       throw Exception(
         'Kunne ikke hente leaderboard med ID $sessionId: ${response.statusCode}',
+      );
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
+
+// HENTER NUVÆRENDE SPØRGSMÅL FOR EN SESSION
+Future<Question> fetchCurrentQuestion(int sessionId) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$baseUrl/Participant/session/$sessionId/current-question'),
+    );
+
+    if (response.statusCode == 200) {
+      // Hvis serveren returnerede en 200 OK response,
+      // så parse JSON'en.
+      return Question.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+    } else {
+      // Hvis serveren ikke returnerede en 200 OK response,
+      // så kast en exception.
+      throw Exception(
+        'Kunne ikke hente nuværende spørgsmål for session $sessionId: ${response.statusCode}',
+      );
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
+
+// INDSENDER SVAR PÅ ET SPØRGSMÅL
+Future<void> submitAnswer(
+  int participantId,
+  int questionId,
+  int answerId,
+  int responseTimeMs,
+) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl/Participant/submit-answer'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'participantId': participantId,
+        'questionId': questionId,
+        'answerId': answerId,
+        'responseTimeMs': responseTimeMs,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Svar er indsendt succesfuldt
+      return;
+    } else {
+      // Hvis serveren ikke returnerede en 200 OK response,
+      // så kast en exception.
+      throw Exception('Kunne ikke indsende svar: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Fejl ved API kald: $e');
+  }
+}
+
+// AFSLUTTER EN QUIZ SESSION
+Future<void> completeQuizSession(int sessionId) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl/QuizSession/$sessionId/complete'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Session er afsluttet succesfuldt
+      return;
+    } else {
+      // Hvis serveren ikke returnerede en 200 OK response,
+      // så kast en exception.
+      throw Exception(
+        'Kunne ikke afslutte session med ID $sessionId: ${response.statusCode}',
       );
     }
   } catch (e) {
