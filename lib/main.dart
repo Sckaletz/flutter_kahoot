@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
+import 'screens/enter_pin_screen.dart';
+import 'screens/join_session_screen.dart';
+import 'screens/waiting_room_screen.dart';
+import 'screens/question_screen.dart';
+import 'screens/leaderboard_screen.dart';
 
 void main() {
-  runApp(const KahootApp());
+  runApp(const MyApp());
 }
 
-class KahootApp extends StatelessWidget {
-  const KahootApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      // fjerner "Debug" banneret i hjørnet, så det ser pro ud
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(child: Text('Her skal vores Kahoot startskærm være')),
+    return MaterialApp(
+      title: 'Kahoot Clone',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7B2CBF)),
+        useMaterial3: true,
       ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const EnterPinScreen(),
+        '/join': (context) => const JoinSessionScreen(),
+        '/waiting': (context) => const WaitingRoomScreen(),
+        '/question': (context) => const QuestionScreen(),
+        '/leaderboard': (context) => const LeaderboardScreen(),
+      },
     );
   }
 }
