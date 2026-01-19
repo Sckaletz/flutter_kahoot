@@ -5,12 +5,12 @@ import '../services/api_service.dart';
 
 // HostPage viser en PIN til den valgte quiz og starter en ny session
 class HostPage extends StatefulWidget {
-  final Quiz quiz;
+  final Quiz quiz; // Quiz objekt der skal hostes
 
   const HostPage({super.key, required this.quiz});
 
   @override
-  State<HostPage> createState() => _HostPageState();
+  State<HostPage> createState() => _HostPageState(); // Opretter state objektet, der håndterer den faktiske tilstand
 }
 
 class _HostPageState extends State<HostPage> {
@@ -113,12 +113,6 @@ class _HostPageState extends State<HostPage> {
         Text(
           'Deltagere: ${_session!.participantCount}',
           style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 32),
-        ElevatedButton.icon(
-          onPressed: _startSession,
-          icon: const Icon(Icons.refresh),
-          label: const Text('Opret ny PIN'),
         ),
       ],
     );
