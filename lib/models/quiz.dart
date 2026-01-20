@@ -9,6 +9,7 @@ class Quiz {
   final int questionCount;
   final List<Question> questions;
 
+  // Constructor for Quiz class
   Quiz({
     required this.id,
     required this.title,
@@ -20,7 +21,7 @@ class Quiz {
         const [], // default tom liste hvis ingen spørgsmål er givet
   });
 
-  // Opretter en Quiz instans fra JSON data modtaget fra API'et
+  // Opretter et Quiz-objekt ud fra JSON-data modtaget fra API'et
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
       id: json['id'] ?? 0,
