@@ -114,58 +114,68 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             color: isTopThree
                 ? _getRankColor(index)
                 : Theme.of(context).cardColor,
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              leading: CircleAvatar(
-                backgroundColor: isTopThree
-                    ? Colors.white
-                    : Theme.of(context).colorScheme.primary,
-                radius: isTopThree ? 28 : 24,
-                child: isTopThree
-                    ? Text(
-                        _getRankEmoji(index),
-                        style: const TextStyle(fontSize: 24),
-                      )
-                    : Text(
-                        '${leaderboardEntry.rank}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-              ),
-              title: Text(
-                leaderboardEntry.nickname,
-                style: TextStyle(
-                  fontWeight: isTopThree ? FontWeight.bold : FontWeight.w500,
-                  fontSize: isTopThree ? 18 : 16,
-                ),
-              ),
-              trailing: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
                 children: [
-                  Text(
-                    '${leaderboardEntry.totalPoints}',
-                    style: TextStyle(
-                      fontSize: isTopThree ? 24 : 20,
-                      fontWeight: FontWeight.bold,
-                      color: isTopThree
-                          ? Colors.white
-                          : Theme.of(context).colorScheme.primary,
+                  // Rank avatar
+                  CircleAvatar(
+                    backgroundColor: isTopThree
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.primary,
+                    radius: 22,
+                    child: isTopThree
+                        ? Text(
+                            _getRankEmoji(index),
+                            style: const TextStyle(fontSize: 20),
+                          )
+                        : Text(
+                            '${leaderboardEntry.rank}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                  ),
+                  const SizedBox(width: 16),
+                  // Nickname
+                  Expanded(
+                    child: Text(
+                      leaderboardEntry.nickname,
+                      style: TextStyle(
+                        fontWeight: isTopThree
+                            ? FontWeight.bold
+                            : FontWeight.w500,
+                        fontSize: isTopThree ? 18 : 16,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Text(
-                    'point',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isTopThree ? Colors.white70 : Colors.grey[600],
-                    ),
+                  const SizedBox(width: 8),
+                  // Points
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${leaderboardEntry.totalPoints}',
+                        style: TextStyle(
+                          fontSize: isTopThree ? 22 : 18,
+                          fontWeight: FontWeight.bold,
+                          color: isTopThree
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      Text(
+                        'point',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isTopThree ? Colors.white70 : Colors.grey[600],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
