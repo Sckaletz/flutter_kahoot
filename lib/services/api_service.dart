@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert'; // for at konvertere JSON til Dart objekter
 import 'package:http/http.dart' as http;
 import '../models/quiz.dart';
 import '../models/quiz_session.dart';

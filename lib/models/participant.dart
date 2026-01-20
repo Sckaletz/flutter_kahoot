@@ -4,7 +4,7 @@ class Participant {
   final int totalPoints;
   final DateTime joinedAt;
   final int quizSessionId;
-  // Opretter en Participant instans
+  // Constructor for Participant class
   Participant({
     required this.id,
     required this.nickname,

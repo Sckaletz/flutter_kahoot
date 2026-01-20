@@ -29,7 +29,7 @@ class _HostPageState extends State<HostPage> {
   List<Leaderboard>? _leaderboard;
   bool _isLoadingLeaderboard = false;
   Question? _currentQuestion;
-  int _timeRemaining = 0;
+  int _timeRemaining = 0; // Tid tilbage til spørgsmålet
 
   @override
   void initState() {

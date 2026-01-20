@@ -4,6 +4,7 @@ class Leaderboard {
   final int totalPoints;
   final int rank;
 
+  // Constructor for Leaderboard class
   Leaderboard({
     required this.participantId,
     required this.nickname,

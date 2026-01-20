@@ -8,7 +8,7 @@ class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
 
   @override
-  State<LandingPage> createState() => _LandingPageState();
+  State<LandingPage> createState() => _LandingPageState(); // Opretter state objektet, der håndterer den faktiske tilstand
 }
 
 // Privat state klasse, der håndterer logikken og tilstanden for LandingPage
@@ -17,7 +17,7 @@ class _LandingPageState extends State<LandingPage> {
   final TextEditingController _pinController = TextEditingController();
   // Boolean der angiver om data stadig indlæses
   bool _isLoading = false;
-  // Besked der vises hvis der opstår en fejl
+
   String? _errorMessage;
 
   @override
