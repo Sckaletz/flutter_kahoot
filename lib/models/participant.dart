@@ -13,7 +13,7 @@ class Participant {
     required this.quizSessionId,
   });
 
-  // Opretter en Participant instans fra JSON data
+  // Opretter et Participant-objekt ud fra JSON-data modtaget fra API'et
   factory Participant.fromJson(Map<String, dynamic> json) {
     return Participant(
       id: json['id'] ?? 0,

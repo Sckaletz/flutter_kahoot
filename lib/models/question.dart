@@ -39,7 +39,7 @@ class Question {
     required this.answers,
   });
 
-  // Opretter en Question instans fra JSON data
+  // Opretter et Question-objekt ud fra JSON-data modtaget fra API'et
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
       id: json['id'] ?? 0,

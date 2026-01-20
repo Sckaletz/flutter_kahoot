@@ -12,7 +12,7 @@ class Leaderboard {
     required this.rank,
   });
 
-  // Opretter en Leaderboard instans fra JSON data
+  // Opretter et Leaderboard-objekt ud fra JSON-data modtaget fra API'et
   factory Leaderboard.fromJson(Map<String, dynamic> json) {
     return Leaderboard(
       participantId: json['participantId'] ?? 0,

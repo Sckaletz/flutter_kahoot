@@ -23,7 +23,7 @@ class QuizSession {
     required this.participantCount,
   });
 
-  // Opretter en QuizSession instans fra JSON data modtaget fra API'et
+  // Opretter et QuizSession-objekt ud fra JSON-data modtaget fra API'et
   factory QuizSession.fromJson(Map<String, dynamic> json) {
     return QuizSession(
       id: json['id'] ?? 0,
