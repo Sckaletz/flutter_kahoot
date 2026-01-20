@@ -23,8 +23,8 @@ class _HostPageState extends State<HostPage> {
   bool _isLoading = true;
   bool _isStarting = false;
   String? _errorMessage;
-  Timer? _pollingTimer;
-  Timer? _questionPollingTimer;
+  Timer? _pollingTimer; // Polling til at hente session info
+  Timer? _questionPollingTimer; // Polling til at hente nuværende spørgsmål
   Timer? _countdownTimer;
   List<Leaderboard>? _leaderboard;
   bool _isLoadingLeaderboard = false;
@@ -267,8 +267,7 @@ class _HostPageState extends State<HostPage> {
   // Tjekker om quiz'en er startet baseret på status
   bool _isQuizStarted(String status) {
     return status.toLowerCase() == 'started' ||
-        status.toLowerCase() == 'inprogress' ||
-        status.toLowerCase() == 'in_progress';
+        status.toLowerCase() == 'inprogress';
   }
 
   // Henter leaderboard for sessionen

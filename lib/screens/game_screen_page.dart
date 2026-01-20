@@ -22,7 +22,7 @@ class GameScreenPage extends StatefulWidget {
 }
 
 class _GameScreenPageState extends State<GameScreenPage> {
-  QuizSession? _session;
+  QuizSession? _session; // Session info
   Question? _currentQuestion;
   bool _isLoading = true;
   bool _isQuizStarted = false;
@@ -31,7 +31,7 @@ class _GameScreenPageState extends State<GameScreenPage> {
   bool? _isAnswerCorrect;
   int _timeRemaining = 0;
   Timer? _countdownTimer;
-  Timer? _sessionPollingTimer;
+  Timer? _sessionPollingTimer; // Polling til at hente session info
   int _totalPoints = 0;
   DateTime? _questionStartTime;
 
@@ -39,7 +39,7 @@ class _GameScreenPageState extends State<GameScreenPage> {
   void initState() {
     super.initState();
     _totalPoints = widget.participant.totalPoints;
-    _checkSessionStatus();
+    _checkSessionStatus(); // Tjekker session status for at se om quiz er startet
   }
 
   @override
@@ -93,8 +93,7 @@ class _GameScreenPageState extends State<GameScreenPage> {
   // Tjekker om session er startet
   bool _isSessionStarted(String status) {
     return status.toLowerCase() == 'started' ||
-        status.toLowerCase() == 'inprogress' ||
-        status.toLowerCase() == 'in_progress';
+        status.toLowerCase() == 'inprogress';
   }
 
   // Tjekker om quiz er færdig
