@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/welcome_screen.dart';
-import 'screens/join_session_screen.dart';
-import 'screens/waiting_room_screen.dart';
-import 'screens/question_screen.dart';
-import 'screens/leaderboard_screen.dart';
+import 'screens/landing_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,19 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kahoot Clone',
+      title: 'Guldgruppen Kahoot',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7B2CBF)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 155, 120, 14),
+        ),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const WelcomeScreen(),
-        '/join': (context) => const JoinSessionScreen(),
-        '/waiting': (context) => const WaitingRoomScreen(),
-        '/question': (context) => const QuestionScreen(),
-        '/leaderboard': (context) => const LeaderboardScreen(),
-      },
+      home: const LandingPage(),
     );
   }
 }
