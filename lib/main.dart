@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // design pakke der bruges til at lave UI'er
 import 'screens/landing_page.dart';
 
 void main() {

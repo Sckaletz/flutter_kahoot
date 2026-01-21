@@ -36,12 +36,8 @@ Future<Quiz> fetchQuizById(int id) async {
     final response = await http.get(Uri.parse('$baseUrl/Quiz/$id'));
 
     if (response.statusCode == 200) {
-      // Hvis serveren returnerede en 200 OK response,
-      // så parse JSON'en.
       return Quiz.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     } else {
-      // Hvis serveren ikke returnerede en 200 OK response,
-      // så kast en exception.
       throw Exception(
         'Kunne ikke indlæse quiz med ID $id: ${response.statusCode}',
       );
@@ -57,14 +53,10 @@ Future<QuizSession> fetchSessionByPin(String pin) async {
     final response = await http.get(Uri.parse('$baseUrl/QuizSession/pin/$pin'));
 
     if (response.statusCode == 200) {
-      // Hvis serveren returnerede en 200 OK response,
-      // så parse JSON'en.
       return QuizSession.fromJson(
         jsonDecode(response.body) as Map<String, dynamic>,
       );
     } else {
-      // Hvis serveren ikke returnerede en 200 OK response,
-      // så kast en exception.
       throw Exception(
         'Kunne ikke finde session med PIN: $pin: ${response.statusCode}',
       );
@@ -119,14 +111,10 @@ Future<Participant> joinSession(String sessionPin, String nickname) async {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // Hvis serveren returnerede en 200 OK eller 201 CREATED response,
-      // så parse JSON'en.
       return Participant.fromJson(
         jsonDecode(response.body) as Map<String, dynamic>,
       );
     } else {
-      // Hvis serveren ikke returnerede en 200/201 response,
-      // så kast en exception.
       throw Exception(
         'Kunne ikke joine session med PIN $sessionPin: ${response.statusCode}',
       );
@@ -144,14 +132,10 @@ Future<Participant> fetchParticipant(int participantId) async {
     );
 
     if (response.statusCode == 200) {
-      // Hvis serveren returnerede en 200 OK response,
-      // så parse JSON'en.
       return Participant.fromJson(
         jsonDecode(response.body) as Map<String, dynamic>,
       );
     } else {
-      // Hvis serveren ikke returnerede en 200 OK response,
-      // så kast en exception.
       throw Exception(
         'Kunne ikke hente deltager med ID $participantId: ${response.statusCode}',
       );
@@ -194,14 +178,10 @@ Future<List<Leaderboard>> fetchLeaderboard(int sessionId) async {
     );
 
     if (response.statusCode == 200) {
-      // Hvis serveren returnerede en 200 OK response,
-      // så parse JSON'en.
       return (jsonDecode(response.body) as List<dynamic>)
           .map((l) => Leaderboard.fromJson(l as Map<String, dynamic>))
           .toList();
     } else {
-      // Hvis serveren ikke returnerede en 200 OK response,
-      // så kast en exception.
       throw Exception(
         'Kunne ikke hente leaderboard med ID $sessionId: ${response.statusCode}',
       );
@@ -219,14 +199,10 @@ Future<Question> fetchCurrentQuestion(int sessionId) async {
     );
 
     if (response.statusCode == 200) {
-      // Hvis serveren returnerede en 200 OK response,
-      // så parse JSON'en.
       return Question.fromJson(
         jsonDecode(response.body) as Map<String, dynamic>,
       );
     } else {
-      // Hvis serveren ikke returnerede en 200 OK response,
-      // så kast en exception.
       throw Exception(
         'Kunne ikke hente nuværende spørgsmål for session $sessionId: ${response.statusCode}',
       );

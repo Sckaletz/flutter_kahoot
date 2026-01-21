@@ -98,6 +98,7 @@ class _QuizListPageState extends State<QuizListPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          // Går til HostPage for den quiz og bruger quiz objektet
                           builder: (context) => HostPage(quiz: quiz),
                         ),
                       );

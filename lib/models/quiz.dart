@@ -17,8 +17,7 @@ class Quiz {
     required this.pin,
     required this.status,
     required this.questionCount,
-    this.questions =
-        const [], // default tom liste hvis ingen spørgsmål er givet
+    this.questions = const [],
   });
 
   // Opretter et Quiz-objekt ud fra JSON-data modtaget fra API'et

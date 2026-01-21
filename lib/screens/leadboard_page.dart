@@ -14,6 +14,7 @@ class LeaderboardPage extends StatefulWidget {
   });
 
   @override
+  // Opretter state objektet, der håndterer den faktiske tilstand
   State<LeaderboardPage> createState() => _LeaderboardPageState();
 }
 

@@ -3,7 +3,6 @@ import 'quiz_list_page.dart';
 import 'nickname_page.dart';
 import '../services/api_service.dart';
 
-// LandingPage er den første skærm, brugeren ser når appen starter
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
 
@@ -15,9 +14,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   // TextEditingController til at håndtere PIN input feltet
   final TextEditingController _pinController = TextEditingController();
-  // Boolean der angiver om data stadig indlæses
   bool _isLoading = false;
-
   String? _errorMessage;
 
   @override
@@ -160,7 +157,7 @@ class _LandingPageState extends State<LandingPage> {
               // Knap der navigerer til quiz listen
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.push navigerer til en ny skærm
+                  // NAVIGATE QUIZ LIST PAGE ------------------------------------------------------------
                   Navigator.push(
                     context,
                     // Opretter en ny route til QuizListPage

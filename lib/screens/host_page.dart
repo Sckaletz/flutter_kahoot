@@ -84,13 +84,14 @@ class _HostPageState extends State<HostPage> {
 
   // Starter polling for at hente nuværende spørgsmål og opdatere leaderboard
   void _startQuestionPolling() {
-    _questionPollingTimer?.cancel();
+    _questionPollingTimer?.cancel(); // Stopper tidligere polling
     _questionPollingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      // Starter polling for at hente nuværende spørgsmål og opdatere leaderboard
       if (_session != null && _isQuizStarted(_session!.status)) {
-        _fetchCurrentQuestion();
+        _fetchCurrentQuestion(); // Henter nuværende spørgsmål
         _fetchLeaderboard(); // Opdater leaderboard løbende
       } else {
-        timer.cancel();
+        timer.cancel(); // Stopper polling
       }
     });
   }
@@ -298,6 +299,7 @@ class _HostPageState extends State<HostPage> {
 
   // Starter quiz session
   Future<void> _startQuiz() async {
+    // Tjekker om session er null eller om der er mindre end 1 deltager
     if (_session == null || _session!.participantCount < 1) return;
 
     setState(() {
@@ -306,6 +308,7 @@ class _HostPageState extends State<HostPage> {
     });
 
     try {
+      //start quiz session med session id
       await startQuizSession(_session!.id);
       // Stop session polling når quiz'en starter
       _pollingTimer?.cancel();
@@ -316,6 +319,7 @@ class _HostPageState extends State<HostPage> {
         await _fetchLeaderboard();
         _startQuestionPolling();
       }
+      //
       if (mounted) {
         setState(() {
           _isStarting = false;
@@ -399,8 +403,12 @@ class _HostPageState extends State<HostPage> {
               ),
               const SizedBox(width: 12),
               IconButton(
+                // COPY PIN TO CLIPBOARD ------------------------------------------------------------
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: _session!.sessionPin));
+                  Clipboard.setData(
+                    //Tager Pin fra session og kopierer til udklipsholder
+                    ClipboardData(text: _session!.sessionPin),
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('PIN kopieret til udklipsholder'),
